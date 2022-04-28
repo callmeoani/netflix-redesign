@@ -5,7 +5,7 @@ import Banner from '../components/general/Banner'
 import requests from '../utils/requests'
 import { Movie } from '../typings'
 import Row from '../components/general/Row'
-
+import useAuth from '../hooks/useAuth'
 
 interface Props {
   netflixOriginals: Movie[]
@@ -27,9 +27,11 @@ const Home = ({
   romanceMovies,
   topRated,
   trendingNow,
-
 }: Props) => {
-  
+  const { logout, loading } = useAuth()
+
+  if (loading) return 'Loading'
+
   return (
     <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]  ">
       <Head>
@@ -38,9 +40,9 @@ const Home = ({
       </Head>
 
       <Header />
-      <main className='relative pl-4 pb-24 lg:space-y-24 lg:pl-16'>
+      <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
         <Banner netflixOriginals={netflixOriginals} />
-        <section className='md:space-y-24'>
+        <section className="md:space-y-24">
           <Row title="Trending Now" movies={trendingNow} />
           <Row title="Top Rated" movies={topRated} />
           <Row title="Action Thrillers" movies={actionMovies} />
@@ -52,12 +54,11 @@ const Home = ({
         </section>
         {/* Modal */}
       </main>
-
     </div>
   )
 }
 
-export default Home;
+export default Home
 
 export const getServerSideProps = async () => {
   const [
@@ -90,10 +91,6 @@ export const getServerSideProps = async () => {
       horrorMovies: horrorMovies.results,
       romanceMovies: romanceMovies.results,
       documentaries: documentaries.results,
-      
-    }
+    },
   }
 }
-
-
-
